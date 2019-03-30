@@ -59,14 +59,8 @@ public class TeacherUserChat extends AppCompatActivity {
         chatList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.chat_list);
 
-        //adding some values to our list
-//        chatList.add(new ChatList("Spiderman", "10.25"));
-//        chatList.add(new ChatList("Batman", "11.25"));
-//        chatList.add(new ChatList("Superman", "10.23"));
-//        chatList.add(new ChatList("Iron Man", "18.25"));
-
         //creating the adapter
-        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.list_row, chatList);
+        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.list_row, chatList, "personal_chat");
 
         //attaching adapter to the listview
         listView.setAdapter(adapter);
@@ -118,7 +112,7 @@ public class TeacherUserChat extends AppCompatActivity {
                         adapter.clear();
                     }
 
-                    adapter = new CustomListAdapter(context, R.layout.list_row, chatList);
+                    adapter = new CustomListAdapter(context, R.layout.list_row, chatList, "personal_chat");
 
                     listView.setAdapter(adapter);
                 } catch (JSONException e) {

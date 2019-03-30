@@ -1,12 +1,12 @@
 package com.example.virtualproctor;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -21,69 +21,47 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import co.intentservice.chatui.ChatView;
-import co.intentservice.chatui.models.ChatMessage;
+public class TeacherGroupMain extends AppCompatActivity {
+    private static final String TAG = "TeacherGroupMain";
 
-import static com.example.virtualproctor.ChatWindow.message;
-
-public class TeacherChatWindow extends AppCompatActivity {
-    private static final String TAG = "TeacherChatWindow";
-    ChatView chatView;
-
-    static String to_user;
-    static String from_user;
     SharedPreferences prefs;
+    String to_group;
+    String from_user;
 
     private RequestQueue mRequestQueue;
-    private StringRequest mStringRequest;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_chat_window);
+        setContentView(R.layout.activity_teacher_group_main);
 
         // get the targer_username
         Bundle extras = getIntent().getExtras();
         prefs = getSharedPreferences(getString(R.string.share_preference_filename), MODE_PRIVATE);
 
-
         from_user = prefs.getString(getString(R.string.login_username), null);
-        to_user = extras.getString("to_user");
+        to_group = extras.getString("to_group");
 
         //RequestQueue initialized
         mRequestQueue = Volley.newRequestQueue(this);
 
-        chatView = findViewById(R.id.chat_view);
+        final EditText message_editTxt = findViewById(R.id.message);
 
-
-        // endpoint : get_all_chats?user1= &user2=
-
-        if(from_user!=null && to_user!=null){
-            load_previous_chats();
-        }
-
-
-        chatView.setOnSentMessageListener(new ChatView.OnSentMessageListener(){
+        Button send_btn = findViewById(R.id.send_btn);
+        send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean sendMessage(ChatMessage chatMessage){
-                // perform actual message sending
-                message = chatView.getTypedMessage();
-                Log.e("RESPONSE", message );
-
-                sendMessageToServer(message);
-
-//                // Add this line where you want when you receive the response from server
-//                chatView.addMessage(new ChatMessage("sdfsd", 12, ChatMessage.Type.RECEIVED));
-                return true;
+            public void onClick(View v) {
+                String msg = message_editTxt.getText().toString();
+                if(msg != null && !msg.equals("")) {
+                    sendMessageToServer(msg);
+                }
             }
         });
+
     }
 
     void sendMessageToServer(String message){
@@ -94,13 +72,13 @@ public class TeacherChatWindow extends AppCompatActivity {
             return;
         }
 
-        String url = Config.URL+"insert_chat";
+        String url = Config.URL+"broadcast_to_group";
         Log.d(TAG, url);
 
         try{
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("from_user", from_user);
-            jsonBody.put("to_user", to_user);
+            jsonBody.put("group_id", to_group);
             jsonBody.put("msg_body", message);
             jsonBody.put("password", password);
             final String requestBody = jsonBody.toString();
@@ -142,7 +120,6 @@ public class TeacherChatWindow extends AppCompatActivity {
                     return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                 }
             };
-
             RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
                     0,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -150,59 +127,8 @@ public class TeacherChatWindow extends AppCompatActivity {
 
             stringRequest.setRetryPolicy(mRetryPolicy);
             mRequestQueue.add(stringRequest);
-
-            mRequestQueue.add(stringRequest);
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    void load_previous_chats(){
-        Log.d(TAG, "load text called");
-
-        //setup the url
-        String ssn = prefs.getString(getString(R.string.login_username), null);
-        if(ssn == null){
-            Log.e(TAG, "SSN NOT SET");
-            return;
-        }
-
-        String url = Config.URL+"get_all_chats?user1="+from_user+"&user2="+to_user;
-        Log.d(TAG, url);
-
-        //String Request initialized
-        mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Response from server "+response.toString());
-
-                try {
-                    JSONArray array = new JSONArray(response.toString());
-                    for(int i=0; i < array.length(); i++) {
-                        JSONObject jsonObject = array.getJSONObject(i);
-
-                        String msg_from_user = jsonObject.optString("from_user").toString();
-                        String msg_body = jsonObject.optString("msg_body").toString();
-                        String msg_time = jsonObject.optString("msg_time").toString();
-                        String msg_to_user = jsonObject.optString("to_user").toString();
-
-                        if(from_user.equals(msg_from_user)){
-                            chatView.addMessage(new ChatMessage(msg_body, 12, ChatMessage.Type.SENT));
-                        }else{
-                            chatView.addMessage(new ChatMessage(msg_body, 12, ChatMessage.Type.RECEIVED));
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG,"Error :" + error.toString());
-            }
-        });
-
-        mRequestQueue.add(mStringRequest);
     }
 }

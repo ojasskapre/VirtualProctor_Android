@@ -7,15 +7,24 @@
     tools:context=".TeacherGroupActivity"
     android:orientation="vertical">
 
-    <EditText
+    <ListView
+        android:id="@+id/group_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_notificaton_text"
-        android:hint="Send Notification"/>
+        android:layout_height="match_parent"
+        android:divider="#b5b5b5"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list_selector" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sendNotificationBtn"
-        android:text="Send"/>
+
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/add_notificaton_text"-->
+        <!--android:hint="Send Notification"/>-->
+
+    <!--<Button-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/sendNotificationBtn"-->
+        <!--android:text="Send"/>-->
 </LinearLayout>
