@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "549704614868",
+    "firebase_url": "https://virtualproctor-d4b0f.firebaseio.com",
+    "project_id": "virtualproctor-d4b0f",
+    "storage_bucket": "virtualproctor-d4b0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549704614868:android:94acedbe543d4693",
+        "android_client_info": {
+          "package_name": "com.example.virtualproctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549704614868-apvrksfe2prlvnum395phmo13acclftb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.virtualproctor",
+            "certificate_hash": "25a9e0704321058b509d20921d02fb1c2f1c0f34"
+          }
+        },
+        {
+          "client_id": "549704614868-3ui9fnbp6oelo7vd7uu20htl7rsptol8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTMTctZr4R6M2lS2Nc96x4xtpr_t0cQnw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549704614868-3ui9fnbp6oelo7vd7uu20htl7rsptol8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
