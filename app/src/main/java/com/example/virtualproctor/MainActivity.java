@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
+    private static String user_role = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             role = jsonObject.getString("role");
                             flag = jsonObject.getString("flag");
+
+                            user_role = role;
                             Log.e("RESPONSE", role);
                             Log.e("RESPONSE", flag);
                         } catch (JSONException e) {
@@ -99,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString(getString(R.string.role), role);
                             editor.apply();
 
-                            if (role.equals("parent")) {
-                                startActivity(new Intent(MainActivity.this, ChatWindow.class));
-                            }
+
 
                             String register_key = prefs.getString(getString(R.string.firebase_register_key), null);
                             if(register_key == null){
@@ -134,9 +135,6 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                 // [END retrieve_current_token]
-                            }
-                            if (role.equals("teacher")) {
-                                startActivity(new Intent(MainActivity.this, TeacherUserChat.class));
                             }
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         } else if (response.equals("both_false")) {
@@ -183,8 +181,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Response from server "+response.toString());
-
-                // TODO start new activity
+                if(user_role == null){
+                    Log.e(TAG, "user_role not set");
+                    return;
+                }else if( user_role.equals("parent")){
+                    startActivity(new Intent(MainActivity.this, ChatWindow.class));
+                }else if(user_role.equals("teacher")){
+                    startActivity(new Intent(MainActivity.this, TeacherUserChat.class));
+                }
             }
         }, new Response.ErrorListener() {
             @Override

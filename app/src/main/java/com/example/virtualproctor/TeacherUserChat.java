@@ -14,6 +14,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +67,8 @@ public class TeacherUserChat extends AppCompatActivity {
 
         //attaching adapter to the listview
         listView.setAdapter(adapter);
+
+        request_server_for_list();
     }
 
     void request_server_for_list(){
@@ -83,24 +90,27 @@ public class TeacherUserChat extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Response from server "+response.toString());
+                try {
+                    JSONArray array = new JSONArray(response.toString());
 
-                // TODO handle response
+                    for(int i=0; i < array.length(); i++){
+                        JSONObject jsonObject = array.getJSONObject(i);
+                        String name = jsonObject.optString("name").toString();
+                        String username = jsonObject.optString("name").toString();
+                        chatList.add(new ChatList(name, username));
+                    }
 
+                    if(adapter != null){
+                        adapter.clear();
+                    }
 
-                if(adapter != null){
-                    adapter.clear();
+                    adapter = new CustomListAdapter(context, R.layout.list_row, chatList);
+
+                    listView.setAdapter(adapter);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Error in parsing JSON");
+                    e.printStackTrace();
                 }
-
-
-                // todo fill chatlist
-
-                adapter = new CustomListAdapter(context, R.layout.list_row, chatList);
-
-                listView.setAdapter(adapter);
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override
