@@ -203,6 +203,13 @@ public class TeacherChatWindow extends AppCompatActivity {
             }
         });
 
+        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+        mStringRequest.setRetryPolicy(mRetryPolicy);
+
         mRequestQueue.add(mStringRequest);
     }
 }
