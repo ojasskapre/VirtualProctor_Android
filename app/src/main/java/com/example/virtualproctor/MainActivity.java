@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     EditText mUsernameText, mPasswordText;
     Button mLoginButton;
     String mUsername = "", mPassword = "";
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e(TAG, error.getMessage());
             }
         }){
             @Override
