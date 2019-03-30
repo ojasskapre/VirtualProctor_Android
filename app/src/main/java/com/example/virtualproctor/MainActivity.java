@@ -45,6 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(getString(R.string.share_preference_filename), MODE_PRIVATE);
 
+        final SharedPreferences.Editor editor_new = prefs.edit();
+
+        //TODO testing code, remove on deployment
+        editor_new.clear();
+        editor_new.apply();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         mUsernameText = findViewById(R.id.username);
         mPasswordText = findViewById(R.id.password);
         mLoginButton = findViewById(R.id.login);
