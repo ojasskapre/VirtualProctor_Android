@@ -1,6 +1,7 @@
 package com.example.virtualproctor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class ChatWindow extends AppCompatActivity {
     RequestQueue queue;
     static String username;
     static String message;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,9 @@ public class ChatWindow extends AppCompatActivity {
         setContentView(R.layout.activity_chat_window);
         chatView = findViewById(R.id.chat_view);
         queue = Volley.newRequestQueue(getApplicationContext());
-//        username = getIntent().getExtras().getString("username");
-//        Log.e("RESPONSE", username);
+        prefs = getSharedPreferences(getString(R.string.share_preference_filename), MODE_PRIVATE);
+        username = prefs.getString(getString(R.string.login_username), null);
+        Log.e("RESPONSE", username);
         chatView.setOnSentMessageListener(new ChatView.OnSentMessageListener(){
             @Override
             public boolean sendMessage(final ChatMessage chatMessage){
@@ -58,6 +61,7 @@ public class ChatWindow extends AppCompatActivity {
                     protected Map<String, String> getParams()
                     {
                         Map<String, String>  params = new HashMap<>();
+                        params.put("username", username);
                         params.put("query", message);
                         Log.e("RESPONSE", params.toString() );
                         return params;
