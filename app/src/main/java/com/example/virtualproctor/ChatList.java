@@ -1,18 +1,14 @@
 package com.example.virtualproctor;
 
 public class ChatList {
+    String username;
     String name;
     String img_url;
-    String time;
 
-    public ChatList(String name, String time) {
+    public ChatList(String name, String username) {
         this.name = name;
+        this.username = username;
         this.img_url = null;
-        this.time = time;
-    }
-
-    public ChatList(String name) {
-        this.name = name;
     }
 
     public String getName() {
@@ -27,7 +23,7 @@ public class ChatList {
         return img_url;
     }
 
-    public String getTime() {
-        return time;
+    public String getUsername() {
+        return username;
     }
 }
