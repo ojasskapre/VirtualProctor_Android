@@ -24,4 +24,6 @@
     <string name="login_password">password</string>
     <string name="role">role</string>
     <string name="firebase_register_key">FirebaseRegisterKey</string>
+    <string name="group">Group</string>
+    <string name="parent">Parent</string>
 </resources>

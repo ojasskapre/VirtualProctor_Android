@@ -1,10 +1,13 @@
 package com.example.virtualproctor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -69,6 +72,15 @@ public class TeacherUserChat extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         request_server_for_list();
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TeacherUserChat.this, TeacherNewChatActivity.class));
+            }
+        });
+
     }
 
     void request_server_for_list(){
