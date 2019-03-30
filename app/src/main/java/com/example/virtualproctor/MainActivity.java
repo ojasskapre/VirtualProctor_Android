@@ -100,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
                             editor.apply();
 
                             if (role.equals("parent")) {
-                                startActivity(new Intent(MainActivity.this, ChatWindow.class));
+                                Intent intent = new Intent(MainActivity.this, ChatWindow.class);
+//                                Bundle extras = intent.getExtras();
+//                                extras.putString("username", mUsername);
+                                startActivity(intent);
                             }
 
                             String register_key = prefs.getString(getString(R.string.firebase_register_key), null);
@@ -129,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
                                                 // Log and toast
                                                 String msg = getString(R.string.msg_token_fmt, token);
                                                 Log.d(TAG, msg);
-
-
                                             }
                                         });
                                 // [END retrieve_current_token]
