@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">VirtualProctor</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="log_in">Log In</string>
+
+    <!--Shared preference-->
+    <string name="share_preference_filename">my_shared_preference</string>
+    <string name="login_username">username</string>
+    <string name="login_password">password</string>
+    <string name="role">role</string>
 </resources>
