@@ -6,16 +6,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 import co.intentservice.chatui.ChatView;
 import co.intentservice.chatui.models.ChatMessage;
@@ -26,8 +32,8 @@ public class TeacherChatWindow extends AppCompatActivity {
     private static final String TAG = "TeacherChatWindow";
     ChatView chatView;
 
-    String to_user;
-    String from_user;
+    static String to_user;
+    static String from_user;
     SharedPreferences prefs;
 
     private RequestQueue mRequestQueue;
@@ -46,6 +52,9 @@ public class TeacherChatWindow extends AppCompatActivity {
 
         from_user = prefs.getString(getString(R.string.login_username), null);
         to_user = extras.getString("to_user");
+
+        //RequestQueue initialized
+        mRequestQueue = Volley.newRequestQueue(this);
 
         chatView = findViewById(R.id.chat_view);
 
@@ -66,26 +75,78 @@ public class TeacherChatWindow extends AppCompatActivity {
 
                 sendMessageToServer(message);
 
-                // Add this line where you want when you receive the response from server
-                chatView.addMessage(new ChatMessage("sdfsd", 12, ChatMessage.Type.RECEIVED));
+//                // Add this line where you want when you receive the response from server
+//                chatView.addMessage(new ChatMessage("sdfsd", 12, ChatMessage.Type.RECEIVED));
                 return true;
             }
         });
     }
 
     void sendMessageToServer(String message){
-        String password = prefs.getString("login_password", null);
+        String password = prefs.getString(getString(R.string.login_password), null);
 
         if(password == null){
+            Log.e(TAG, "password not set");
+            return;
+        }
 
+        String url = Config.URL+"insert_chat";
+        Log.d(TAG, url);
+
+        try{
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("from_user", from_user);
+            jsonBody.put("to_user", to_user);
+            jsonBody.put("msg_body", message);
+            jsonBody.put("password", password);
+            final String requestBody = jsonBody.toString();
+            Log.e(TAG, requestBody);
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("VOLLEY", response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VOLLEY", error.toString());
+                }
+            }){
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+                        responseString = String.valueOf(response.statusCode);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            mRequestQueue.add(stringRequest);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     void load_previous_chats(){
         Log.d(TAG, "load text called");
-
-        //RequestQueue initialized
-        mRequestQueue = Volley.newRequestQueue(this);
 
         //setup the url
         String ssn = prefs.getString(getString(R.string.login_username), null);
