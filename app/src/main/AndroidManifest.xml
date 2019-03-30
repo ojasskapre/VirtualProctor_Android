@@ -12,28 +12,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChatWindow">
-
-        </activity>
-        <activity android:name=".TeacherUserChat">
-
-        </activity>
+        <activity android:name=".TeacherChatWindow"></activity>
+        <activity android:name=".ChatWindow"></activity>
+        <activity android:name=".TeacherUserChat"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- [START firebase_service] -->
+        </activity> <!-- [START firebase_service] -->
         <service
             android:name=".MyFirebaseMessagingService"
-            android:exported="true"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END firebase_service] -->
     </application>
 
 </manifest>

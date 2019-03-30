@@ -135,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
                                         });
                                 // [END retrieve_current_token]
                             }
+                            if (role.equals("teacher")) {
+                                startActivity(new Intent(MainActivity.this, TeacherUserChat.class));
+                            }
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         } else if (response.equals("both_false")) {
                             Toast.makeText(getApplicationContext(), "Both credentials wrong", Toast.LENGTH_SHORT).show();
