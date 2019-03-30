@@ -1,5 +1,6 @@
 package com.example.virtualproctor;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString(getString(R.string.role), role);
                             editor.apply();
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent());
                         } else if (response.equals("both_false")) {
                             Toast.makeText(getApplicationContext(), "Both credentials wrong", Toast.LENGTH_SHORT).show();
                         } else if (response.equals("username_false")) {
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.getMessage());
+//                Log.e(TAG, error.getMessage());
             }
         }){
             @Override
