@@ -2,6 +2,7 @@ package com.example.virtualproctor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,11 +33,16 @@ public class MainActivity extends AppCompatActivity {
     EditText mUsernameText, mPasswordText;
     Button mLoginButton;
     String mUsername = "", mPassword = "";
+    SharedPreferences prefs;
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        prefs = getSharedPreferences(getString(R.string.share_preference_filename), MODE_PRIVATE);
 
         mUsernameText = findViewById(R.id.username);
         mPasswordText = findViewById(R.id.password);
@@ -83,13 +93,49 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("RESPONSE", response);
                         if (flag.equals("true")) {
                             // start new activity
-                            SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.share_preference_filename), MODE_PRIVATE).edit();
+                            final SharedPreferences.Editor editor = prefs.edit();
                             editor.putString(getString(R.string.login_username), mUsername);
                             editor.putString(getString(R.string.login_password), mPassword);
                             editor.putString(getString(R.string.role), role);
                             editor.apply();
+
+                            if (role.equals("parent")) {
+                                startActivity(new Intent(MainActivity.this, ChatWindow.class));
+                            }
+
+                            String register_key = prefs.getString(getString(R.string.firebase_register_key), null);
+                            if(register_key == null){
+                                // key not set, so save key in shared prefs and send a copy to server
+
+                                // Get token
+                                // [START retrieve_current_token]
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Log.e(TAG, "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+
+                                                // Get new Instance ID token
+                                                String token = task.getResult().getToken();
+
+                                                editor.putString(getString(R.string.firebase_register_key), token);
+                                                editor.apply();
+
+                                                sendRegisterKeyToServer(token);
+
+                                                // Log and toast
+                                                String msg = getString(R.string.msg_token_fmt, token);
+                                                Log.d(TAG, msg);
+
+
+                                            }
+                                        });
+                                // [END retrieve_current_token]
+                            }
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent());
                         } else if (response.equals("both_false")) {
                             Toast.makeText(getApplicationContext(), "Both credentials wrong", Toast.LENGTH_SHORT).show();
                         } else if (response.equals("username_false")) {
@@ -113,5 +159,37 @@ public class MainActivity extends AppCompatActivity {
                 return params;
             }};
         queue.add(stringRequest);
+    }
+
+    void sendRegisterKeyToServer(final String register_key){
+        //RequestQueue initialized
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        //setup the url
+        String ssn = prefs.getString(getString(R.string.login_username), null);
+        if(ssn == null){
+            Log.e(TAG, "SSN NOT SET");
+            return;
+        }
+
+        String url = Config.URL+"register?username="+ssn+"&fcm_id="+register_key;
+        Log.d(TAG, url);
+
+        //String Request initialized
+        mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Response from server "+response.toString());
+
+                // TODO start new activity
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,"Error :" + error.toString());
+            }
+        });
+
+        mRequestQueue.add(mStringRequest);
     }
 }
