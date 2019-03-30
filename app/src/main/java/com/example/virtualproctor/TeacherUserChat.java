@@ -96,7 +96,7 @@ public class TeacherUserChat extends AppCompatActivity {
                     for(int i=0; i < array.length(); i++){
                         JSONObject jsonObject = array.getJSONObject(i);
                         String name = jsonObject.optString("name").toString();
-                        String username = jsonObject.optString("name").toString();
+                        String username = jsonObject.optString("username").toString();
                         chatList.add(new ChatList(name, username));
                     }
 

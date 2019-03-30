@@ -71,9 +71,9 @@ public class CustomListAdapter extends ArrayAdapter<ChatList> {
             public void onClick(View v) {
 
                 Log.d(TAG, chat_user.getUsername());
-//                Intent intent = new Intent(context, MainActivity.class);
-//                intent.putExtra("TagetUser", chat_user.getUsername());
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, TeacherChatWindow.class);
+                intent.putExtra("to_user", chat_user.getUsername());
+                context.startActivity(intent);
             }
         });
 
