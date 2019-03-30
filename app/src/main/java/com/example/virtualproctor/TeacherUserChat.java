@@ -73,14 +73,16 @@ public class TeacherUserChat extends AppCompatActivity {
 
         request_server_for_list();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(TeacherUserChat.this, TeacherNewChatActivity.class));
-            }
-        });
-
+        String user_role = prefs.getString(getString(R.string.role), null);
+        if(user_role.equals("teacher")){
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(TeacherUserChat.this, TeacherNewChatActivity.class));
+                }
+            });
+        }
     }
 
     void request_server_for_list(){
