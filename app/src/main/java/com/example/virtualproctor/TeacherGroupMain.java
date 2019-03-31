@@ -45,6 +45,8 @@ public class TeacherGroupMain extends AppCompatActivity {
 
         from_user = prefs.getString(getString(R.string.login_username), null);
         to_group = extras.getString("to_group");
+        String title = extras.getString("title_name");
+        setTitle(title);
 
         //RequestQueue initialized
         mRequestQueue = Volley.newRequestQueue(this);

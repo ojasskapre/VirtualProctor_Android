@@ -77,11 +77,13 @@ public class CustomListAdapter extends ArrayAdapter<ChatList> {
                     Log.d(TAG, chat_user.getUsername());
                     Intent intent = new Intent(context, TeacherGroupMain.class);
                     intent.putExtra("to_group", chat_user.getUsername());
+                    intent.putExtra("title_name", chat_user.getName());
                     context.startActivity(intent);
                 }else if(adapter_type.equals("personal_chat")){
                     Log.d(TAG, chat_user.getUsername());
                     Intent intent = new Intent(context, TeacherChatWindow.class);
                     intent.putExtra("to_user", chat_user.getUsername());
+                    intent.putExtra("title_name", chat_user.getName());
                     context.startActivity(intent);
                 }
             }
