@@ -2,6 +2,7 @@ package com.example.virtualproctor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -59,8 +62,8 @@ public class ChatWindow extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Log.e("RESPONSE", response);
-                                chatView.addMessage(new ChatMessage(response, 12, ChatMessage.Type.RECEIVED));
+                                    Log.e("RESPONSE", response);
+                                    chatView.addMessage(new ChatMessage(response, 12, ChatMessage.Type.RECEIVED));
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -77,6 +80,12 @@ public class ChatWindow extends AppCompatActivity {
                         Log.e("RESPONSE", params.toString() );
                         return params;
                     }};
+                RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+                stringRequest.setRetryPolicy(mRetryPolicy);
                 queue.add(stringRequest);
 
                 // Add this line where you want when you receive the response from server
