@@ -41,8 +41,6 @@ public class TeacherChatWindow extends AppCompatActivity {
     SharedPreferences prefs;
 
     private RequestQueue mRequestQueue;
-    private StringRequest mStringRequest;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +147,6 @@ public class TeacherChatWindow extends AppCompatActivity {
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
             stringRequest.setRetryPolicy(mRetryPolicy);
-            mRequestQueue.add(stringRequest);
 
             mRequestQueue.add(stringRequest);
         }catch (Exception e){
@@ -171,7 +168,7 @@ public class TeacherChatWindow extends AppCompatActivity {
         Log.d(TAG, url);
 
         //String Request initialized
-        mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Response from server "+response.toString());
@@ -202,13 +199,6 @@ public class TeacherChatWindow extends AppCompatActivity {
                 Log.e(TAG,"Error :" + error.toString());
             }
         });
-
-        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-
-        mStringRequest.setRetryPolicy(mRetryPolicy);
 
         mRequestQueue.add(mStringRequest);
     }
