@@ -70,6 +70,7 @@ public class TeacherUserChat extends AppCompatActivity {
         String user_role = prefs.getString(getString(R.string.role), null);
         if(user_role.equals("teacher")){
             FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
