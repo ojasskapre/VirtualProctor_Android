@@ -3,11 +3,13 @@ package com.example.virtualproctor;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -68,9 +70,8 @@ public class TeacherUserChat extends AppCompatActivity {
         request_server_for_list();
 
         String user_role = prefs.getString(getString(R.string.role), null);
+        FloatingActionButton fab = findViewById(R.id.fab);
         if(user_role.equals("teacher")){
-            FloatingActionButton fab = findViewById(R.id.fab);
-            fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
