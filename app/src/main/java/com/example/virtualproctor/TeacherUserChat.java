@@ -59,28 +59,24 @@ public class TeacherUserChat extends AppCompatActivity {
         chatList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.chat_list);
 
-        //adding some values to our list
-//        chatList.add(new ChatList("Spiderman", "10.25"));
-//        chatList.add(new ChatList("Batman", "11.25"));
-//        chatList.add(new ChatList("Superman", "10.23"));
-//        chatList.add(new ChatList("Iron Man", "18.25"));
-
         //creating the adapter
-        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.list_row, chatList);
+        CustomListAdapter adapter = new CustomListAdapter(this, R.layout.list_row, chatList, "personal_chat");
 
         //attaching adapter to the listview
         listView.setAdapter(adapter);
 
         request_server_for_list();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(TeacherUserChat.this, TeacherNewChatActivity.class));
-            }
-        });
-
+        String user_role = prefs.getString(getString(R.string.role), null);
+        if(user_role.equals("teacher")){
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(TeacherUserChat.this, TeacherNewChatActivity.class));
+                }
+            });
+        }
     }
 
     void request_server_for_list(){
@@ -116,7 +112,7 @@ public class TeacherUserChat extends AppCompatActivity {
                         adapter.clear();
                     }
 
-                    adapter = new CustomListAdapter(context, R.layout.list_row, chatList);
+                    adapter = new CustomListAdapter(context, R.layout.list_row, chatList, "personal_chat");
 
                     listView.setAdapter(adapter);
                 } catch (JSONException e) {

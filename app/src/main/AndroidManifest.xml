@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EnterStudentId"></activity>
-        <activity android:name=".TeacherGroupActivity" />
+        <activity android:name=".TeacherGroupMain"></activity>
+        <activity android:name=".EnterStudentId" />
+        <activity android:name=".TeacherGroupActivity">
+
+        </activity>
         <activity android:name=".TeacherNewChatActivity" />
         <activity android:name=".TeacherChatWindow" />
         <activity android:name=".ChatWindow" />

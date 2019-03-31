@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/previous_chats"
+        android:title="Previous Chats" />
+
+    <item
+        android:id="@+id/notification_menu"
+        android:title="Notification" />
+</menu>

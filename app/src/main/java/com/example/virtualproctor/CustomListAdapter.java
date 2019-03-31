@@ -32,11 +32,14 @@ public class CustomListAdapter extends ArrayAdapter<ChatList> {
     //the layout resource file for the list items
     int resource;
 
-    public CustomListAdapter(Context context, int resource, List<ChatList> chatList) {
+    String adapter_type = null;
+
+    public CustomListAdapter(Context context, int resource, List<ChatList> chatList, String type) {
         super(context, resource, chatList);
         this.context = context;
         this.resource = resource;
         this.chatList = chatList;
+        this.adapter_type = type;
     }
 
 
@@ -70,10 +73,17 @@ public class CustomListAdapter extends ArrayAdapter<ChatList> {
             @Override
             public void onClick(View v) {
 
-                Log.d(TAG, chat_user.getUsername());
-                Intent intent = new Intent(context, TeacherChatWindow.class);
-                intent.putExtra("to_user", chat_user.getUsername());
-                context.startActivity(intent);
+                if(adapter_type.equals("teacher_group")){
+                    Log.d(TAG, chat_user.getUsername());
+                    Intent intent = new Intent(context, TeacherGroupMain.class);
+                    intent.putExtra("to_group", chat_user.getUsername());
+                    context.startActivity(intent);
+                }else if(adapter_type.equals("personal_chat")){
+                    Log.d(TAG, chat_user.getUsername());
+                    Intent intent = new Intent(context, TeacherChatWindow.class);
+                    intent.putExtra("to_user", chat_user.getUsername());
+                    context.startActivity(intent);
+                }
             }
         });
 
