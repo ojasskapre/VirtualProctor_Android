@@ -63,7 +63,14 @@ public class ChatWindow extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                     Log.e("RESPONSE", response);
+                                    if (response.substring(0,7).equals("teacher")) {
+                                        Intent intent = new Intent(getApplicationContext(), TeacherChatWindow.class);
+                                        intent.putExtra("to_user", response.substring(7,14));
+                                        intent.putExtra("title_name", response.substring(14,response.length()));
+                                        startActivity(intent);
+                                }else {
                                     chatView.addMessage(new ChatMessage(response, 12, ChatMessage.Type.RECEIVED));
+                                }
                             }
                         }, new Response.ErrorListener() {
                     @Override
